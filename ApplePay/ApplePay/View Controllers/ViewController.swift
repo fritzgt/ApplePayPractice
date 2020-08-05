@@ -49,8 +49,20 @@ class ViewController: UIViewController {
     
     //MARK: - Private Methods
     private func startPayment(){
-        
+        let paymentController = PKPaymentAuthorizationViewController()
+        paymentController.delegate = self
+        present(paymentController, animated: true, completion: nil)
     }
 
 }
 
+//MARK: - PKPaymentAuthorizationViewControllerDelegate
+extension ViewController: PKPaymentAuthorizationViewControllerDelegate{
+    func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, handler completion: @escaping (PKPaymentAuthorizationResult) -> Void) {
+        completion(PKPaymentAuthorizationResult(status: .success, errors: nil))
+    }
+}
