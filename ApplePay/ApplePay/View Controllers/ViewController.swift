@@ -7,20 +7,39 @@
 //
 
 import UIKit
+import PassKit
 
 class ViewController: UIViewController {
     
     //MARK: - Properties
-    @IBOutlet weak var payButton: UIButton!
+    
+    private var cart = [PKPaymentSummaryItem]()
+    
+    private var paymentRequest: PKPaymentRequest {
+        let request = PKPaymentRequest()
+        
+        request.merchantIdentifier = ""//Research for this
+        request.supportedNetworks = [.amex,.masterCard,.visa]
+        request.supportedCountries = ["US"]
+        request.merchantCapabilities = .capability3DS
+        
+        request.countryCode = "US"
+        request.currencyCode = "USD"
+        
+        request.paymentSummaryItems = cart
+        
+        return request
+    }
     
     //MARK: - Outlets
-    
+    @IBOutlet weak var payButton: UIButton!
     
     
     //MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        cart.append(PKPaymentSummaryItem(label: "iPhone 11", amount: 1099))
     }
     
     //MARK: - Actions
